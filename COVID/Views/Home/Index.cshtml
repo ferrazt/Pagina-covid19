@@ -1,0 +1,177 @@
+﻿@model COVID.Controllers.HomeController.HomeViewModel
+@{
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    .percent-box {
+        top: 10px;
+        font-size: 15px;
+    }
+
+    .inner p {
+        text-align: left;
+        margin-bottom: 10px;
+        font-size: 15px;
+    }
+
+    .fa-level-up-alt {
+        color: #ffd800;
+    }
+
+    .fa-angle-double-up {
+        color: #ffd800;
+        font-size: 40px;
+    }
+
+    .titulo h1 {
+        font-family: "Lucida Grande", "Lucida Sans Unicode", "Arial, Helvetica", "sans-serif";
+        color: #333333;
+    }
+
+    .inner small {
+        top: -10px;
+    }
+
+    .second-box {
+        border-left: 5px solid #f3f3f4
+    }
+
+    .color-laranja {
+        color: #f3f3f4;
+        /*font-weight: 700;*/
+    }
+</style>
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="small-box bg-cor7">
+                        <div class="inner" style="text-align: center">
+                            <p>TOTAL DE MORTES</p>
+                            <h3>@(Model.TB01.Where(x=> x.city_ibge_code != 12).Sum(x =>Convert.ToInt32( x.last_available_deaths)).ToString("N0")) <span style="font-size: 27px;"></span></h3>
+                            <small></small>
+                        </div>
+                        <div class="percent-box"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="small-box bg-cor7">
+                        <div class="inner" style="text-align: center">
+                            <p>Últimas confirmações de casos de COVID19</p>
+                            <h3>@(Model.TB01.Where(x=> x.city_ibge_code != 12).Sum(x =>Convert.ToInt64( x.last_available_confirmed)).ToString("N0")) <span style="font-size: 27px;"></span></h3>
+                            <small></small>
+                        </div>
+                        <div class="percent-box"></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="small-box bg-cor7">
+                        <div class="inner" style="text-align: center">
+                            <p>Últimas confirmações de Morte por COVID19</p>
+                            <h3>@(Model.TB01.Where(x=> x.city_ibge_code != 12).Sum(x =>Convert.ToInt64( x.new_confirmed)).ToString("N0")) <span style="font-size: 27px;"></span></h3>
+                            <small></small>
+                        </div>
+                        <div class="percent-box"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12 shadow-graph" style="margin-top:15px">
+    <figure class="highcharts-figure">
+        <div style="height:350px" id="visao-online"></div>
+    </figure>
+</div>
+@*<div class="col-md-12 shadow-graph" style="margin-top:15px">
+    <figure class="highcharts-figure">
+        <div style="height:350px" id="visao-online-novas"></div>
+    </figure>
+</div>*@
+@section scripts{ 
+    <script src="~/lib/highcharts/highcharts.min.js"></script>
+    <script type="text/javascript">
+
+    var charOnlineSite = Highcharts.chart('visao-online', {
+                chart: {
+                    type: 'line',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: 'Visão Online Casos Confirmados COVID19'
+                },
+                xAxis: {
+                    categories:  [@Html.Raw("'" + String.Join("','", Model.TB01.Select(s => s.date).Distinct()) + "'")]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Casos Confirmados'
+                    },
+                    min:0
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                 series: [{
+                     name: 'São Paulo',
+                      data: [@Html.Raw(String.Join(",", Model.TB01.Where(w => w.state == "SP" && w.city_ibge_code != 12).Select(s => s.last_available_confirmed == null ? "null" : s.last_available_confirmed.ToString())))]
+                },{
+                         name: 'Distrito Federal',
+                    data: [@Html.Raw(String.Join(",", Model.TB01.Where(w => w.state == "DF" && w.city_ibge_code != 12).Select(s => s.last_available_confirmed == null ? "null" : s.last_available_confirmed.ToString())))]
+                },{
+                         name: 'Minas Gerais',
+                    data: [@Html.Raw(String.Join(",", Model.TB01.Where(w => w.state == "MG" && w.city_ibge_code != 12).Select(s => s.last_available_confirmed == null ? "null" : s.last_available_confirmed.ToString())))]
+                }
+                  ]
+    });
+    @*var charOnlineSite = Highcharts.chart('visao-online-novas', {
+                chart: {
+                    type: 'line',
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: 'Visão Online Novos Casos COVID19'
+                },
+                xAxis: {
+                    categories:  [@Html.Raw("'" + String.Join("','", Model.TB01.Select(s => s.date).Distinct()) + "'")]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Casos Confirmados'
+                    },
+                    min:0
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                    }
+                },
+                credits: {
+                    enabled: false
+                },
+                 series: [{
+                     name: 'NOVAS CONFIRMAÇÕES',
+                      data: [@Html.Raw(String.Join(",", Model.TB01.Where(w => w.city_ibge_code != 12).Select(s => s.new_confirmed == null ? "null" : s.new_confirmed.ToString())))]
+                },{
+                         name: 'NOVAS MORTES',
+                    data: [@Html.Raw(String.Join(",", Model.TB01.Where(w =>  w.city_ibge_code != 12).Select(s => s.new_deaths == null ? "null" : s.new_deaths.ToString())))]
+                },{
+                         name: 'POPULAÇÃO ESTIMADA',
+                    data: [@Html.Raw(String.Join(",", Model.TB01.Where(w =>  w.city_ibge_code != 12).Select(s => s.estimated_population == null ? "null" : s.estimated_population.ToString())))]
+                }
+                  ]
+                   });*@
+
+
+    </script>
+}

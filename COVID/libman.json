@@ -1,0 +1,71 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "bootstrap-datepicker@1.9.0",
+      "destination": "wwwroot/bootstrap-datepicker/"
+    },
+    {
+      "library": "jquery-datetimepicker@2.5.20",
+      "destination": "wwwroot/jquery-datetimepicker/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "vendor@1.7.0",
+      "destination": "wwwroot/vendor/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "themes@0.0.1",
+      "destination": "wwwroot/themes/"
+    },
+    {
+      "library": "bootstrap-modal@2.2.6",
+      "destination": "wwwroot/bootstrap-modal/"
+    },
+    {
+      "library": "jquery@3.6.0",
+      "destination": "wwwroot/jquery/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "bootstrap4-datetimepicker@5.2.3",
+      "destination": "wwwroot/lib/bootstrap4-datetimepicker/"
+    },
+    {
+      "library": "bootstrap-select@1.13.18",
+      "destination": "wwwroot/lib/bootstrap-select/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "chartjs@0.3.24",
+      "destination": "wwwroot/lib/chartjs/"
+    },
+    {
+      "library": "datatables@1.10.21",
+      "destination": "wwwroot/lib/datatables/"
+    },
+    {
+      "library": "highcharts@9.1.2",
+      "destination": "wwwroot/lib/highcharts/"
+    },
+    {
+      "library": "metisMenu@3.0.7",
+      "destination": "wwwroot/lib/metisMenu/"
+    },
+    {
+      "provider": "jsdelivr",
+      "library": "modernizr@3.11.7",
+      "destination": "wwwroot/lib/modernizr/"
+    },
+    {
+      "library": "pace@1.2.4",
+      "destination": "wwwroot/lib/pace/"
+    },
+    {
+      "library": "popper.js@2.9.2",
+      "destination": "wwwroot/lib/popper.js/"
+    }
+  ]
+}

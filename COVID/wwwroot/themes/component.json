@@ -1,0 +1,13 @@
+{
+  "name": "themes",
+  "description": "Collection of HTML, CSS/LESS themes by Upstage.",
+  "version": "0.0.1",
+  "repo": "upstage/themes",
+  "main": [
+    "./themes/"
+  ],
+  "dependencies": {
+    "assemble": "~0.3.72",
+    "assemble-less": "~0.4.0"
+  }
+}
