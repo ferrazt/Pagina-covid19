@@ -1,9 +1,9 @@
 ﻿@model COVID.Controllers.HomeController.HomeViewModel
 @{
     ViewData["Title"] = "Home Page";
-    var date1 = new DateTime().AddYears(2021).AddMonths(7).AddDays(16);
-    var date2 = new DateTime().AddYears(2020).AddMonths(2).AddDays(10);
-    
+
+
+
 }
 <style>
     .percent-box {
@@ -47,53 +47,75 @@
 
 <div class="col-md-12">
     <div class="row">
-        <div class="col-lg-12">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="small-box bg-cor7">
-                        <div class="inner" style="text-align: center">
-                            <p>TOTAL DE MORTES HOJE</p>
-                            <h3>@(Model.VW01_COVID_UF.Sum(x => x.ULTIMO_CASO_MORTE).Value.ToString("N0")) <span style="font-size: 27px;"></span></h3>
-                            <small></small>
-                        </div>
-                        <div class="percent-box"></div>
+        <div class="col-lg-3">
+            <button class="btn-dark percent-box">
+                <div class="small-box percent-box">
+                    <div class="inner p" style="text-align: center; padding: 20px">
+                        <p>TOTAL DE MORTES POR DIA NO BRASIL</p>
+                        <h1>@(Model.VW01_COVID_UF.Where(x => x.DATA >= ViewBag.dataOntem).Sum(x => x.ULTIMO_CASO_MORTE).Value.ToString("N0")) <span style="font-size: 27px;"></span></h1>
+                        <small></small>
                     </div>
+                    <div class="percent-box"></div>
                 </div>
-                <div class="col-md-4">
-                    <div class="small-box bg-cor7">
-                        <div class="inner" style="text-align: center">
-                            <p>Últimas confirmações de casos de COVID19</p>
-                            <h3>@(Model.VW01_COVID_UF.Sum(x =>Convert.ToInt64(x.ULTIMA_CASO_CONFIRMADO)).ToString("N0")) <span style="font-size: 27px;"></span></h3>
-                            <small></small>
-                        </div>
-                        <div class="percent-box"></div>
+            </button>
+        </div>
+        <div class="col-lg-3">
+            <button class="btn-dark percent-box">
+                <div class="small-box percent-box">
+                    <div class="inner" style="text-align: center; padding: 20px">
+                        <p>CASOS DE COVID NO BRASIL</p>
+                        <h1>@(Model.VW01_COVID_UF.Where(x => x.DATA >= ViewBag.dataOntem).Sum(x =>Convert.ToInt64(x.ULTIMA_CASO_CONFIRMADO)).ToString("N0")) <span style="font-size: 27px;"></span></h1>
+                        <small></small>
                     </div>
+                    <div class="percent-box"></div>
                 </div>
-                <div class="col-md-4">
-                    <div class="small-box bg-cor7">
-                        <div class="inner" style="text-align: center">
-                            <p>Últimas confirmações de Morte por COVID19</p>
-                            <h3>@(Model.VW01_COVID_UF.Sum(x =>Convert.ToInt64(x.NOVA_MORTE)).ToString("N0")) <span style="font-size: 27px;"></span></h3>
-                            <small></small>
-                        </div>
-                        <div class="percent-box"></div>
+            </button>
+        </div>
+        <div class="col-lg-3">
+            <button class="btn-dark percent-box">
+                <div class="small-box percent-box">
+                    <div class="inner" style="text-align: center; padding: 20px">
+                        <p>NÚMERO DE CONFIRMADOS HOJE NO BRASIL</p>
+                        <h1>@(Model.VW01_COVID_UF.Where(x => x.DATA >= ViewBag.dataOntem).Sum(x =>Convert.ToInt64(x.NOVA_CONFIRMACAO)).ToString("N0")) <span style="font-size: 27px;"></span></h1>
+                        <small></small>
                     </div>
+                    <div class="percent-box"></div>
                 </div>
-            </div>
+            </button>
+        </div>
+        <div class="col-lg-3">
+            <button class="btn-dark percent-box">
+                <div class="small-box percent-box">
+                    <div class="inner" style="text-align: center; padding: 20px">
+                        <p>POPULAÇÃO ESTIMADA</p>
+                        <h1>@(Model.VW01_COVID_UF.Where(x => x.DATA >= ViewBag.dataOntem).Sum(x =>Convert.ToInt64(x.POPULACAO_ESTIMADA)).ToString("N0")) <span style="font-size: 27px;"></span></h1>
+                        <small></small>
+                    </div>
+                    <div class="percent-box"></div>
+                </div>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 shadow-graph" style="margin-top:20px">
+            <figure class="highcharts-figure">
+                <div style="height:350px" id="visao-online"></div>
+            </figure>
+        </div>
+        <div class="col-md-12 shadow-graph" style="margin-top:15px">
+            <figure class="highcharts-figure">
+                <div style="height:350px" id="visao-online-novas"></div>
+            </figure>
+        </div>
+        <div class="col-md-12 shadow-graph" style="margin-top:15px">
+            <figure class="highcharts-figure">
+                <div style="height:350px" id="visao-online-uf"></div>
+            </figure>
         </div>
     </div>
 </div>
-<div class="col-md-12 shadow-graph" style="margin-top:15px">
-    <figure class="highcharts-figure">
-        <div style="height:350px" id="visao-online"></div>
-    </figure>
-</div>
-<div class="col-md-12 shadow-graph" style="margin-top:15px">
-    <figure class="highcharts-figure">
-        <div style="height:350px" id="visao-online-novas"></div>
-    </figure>
-</div>
-@section scripts{ 
+
+@section scripts{
     <script src="~/lib/highcharts/highcharts.min.js"></script>
     <script type="text/javascript">
 
@@ -106,7 +128,7 @@
                     text: 'Visão Online Casos Confirmados COVID19'
                 },
                 xAxis: {
-                    categories:  [@Html.Raw("'" + String.Join("','", Model.VW02_COVID_ONLINE.Select(x => x.DA.Value.ToString("dd/MM/yyyy"))) + "'")]
+                    categories:  [@Html.Raw("'" + String.Join("','", Model.VW02_COVID_ONLINE.Select(x => x.DATA_COMPLETA.Value.ToString("dd/MM/yyyy"))) + "'")]
                 },
                 yAxis: {
                     title: {
@@ -166,6 +188,42 @@
                  series: [{
                      name: 'TOTAL NO BRASIL',
                       data: [@Html.Raw(String.Join(",", Model.VW02_COVID_ONLINE.GroupBy(x => x.DATA).Select(x => x.Sum(x =>Convert.ToInt32(x.ULTIMA_CASO_CONFIRMADO)))))]
+                }
+                  ]
+    });
+        var charOnlineSite = Highcharts.chart('visao-online-uf', {
+                chart: {
+                zoomType: 'xy',
+                type: 'column'
+                },
+                title: {
+                    text: 'Visão Online Novos Casos HOJE'
+                },
+                xAxis: {
+                    categories:  [@Html.Raw("'" + String.Join("','", Model.VW01_COVID_UF.Select(x=>x.ESTADO).Distinct()) + "'")]
+                    ,crosshair:true
+            },
+                yAxis: {
+                    title: {
+                        text: 'Casos Confirmados',
+
+                    },
+                    min:0
+                },
+                plotOptions: {
+                    line: {
+                        dataLabels: {
+                            enabled: false
+                        },
+                    }
+            },
+
+                credits: {
+                    enabled: false
+                },
+                 series: [{
+                     name: 'Casos confirmados' ,
+                      data: [@Html.Raw(String.Join(",", Model.VW01_COVID_UF.GroupBy(x => x.ESTADO).Select(x => x.Sum(x =>Convert.ToInt32(x.ULTIMA_CASO_CONFIRMADO)))))]
                 }
                   ]
                    });

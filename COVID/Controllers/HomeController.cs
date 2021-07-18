@@ -37,6 +37,11 @@ namespace COVID.Controllers
 
         public IActionResult Index()
         {
+            DateTime localDate = DateTime.Now;
+            var dataOntem = localDate.AddDays(-3);
+            
+
+
 
             var model = new HomeViewModel 
             { 
@@ -44,7 +49,8 @@ namespace COVID.Controllers
                 VW02_COVID_ONLINE = _VW02.Listar(),
                 VW01_COVID_UF = _VW01_UF.Listar()
             };
-
+            ViewBag.dataOntem = dataOntem;
+            ViewBag.DataHoje = localDate;
             return View(model);
         }
 
