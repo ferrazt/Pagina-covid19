@@ -8,20 +8,19 @@ using System.Threading.Tasks;
 
 namespace COVID.Repository
 {
-    public class TB_COVID_01Repository : ITB_COVID_01
+    public class VW02_COVID_ONLINERepository : IVW02_COVID_ONLINE
     {
         public COVIDContext _db { get; set; }
 
-        public TB_COVID_01Repository(COVIDContext db) : base()
+        public VW02_COVID_ONLINERepository(COVIDContext db) : base()
         {
             _db = db;
         }
-        public IEnumerable<TB_COVID_01> Listar()
+
+        public IEnumerable<VW02_COVID_ONLINE> Listar()
         {
-            var model = _db.TB_COVID_01.ToList();
+            var model = _db.VW02_COVID_ONLINE.ToList();
             return model;
         }
-
-
     }
 }

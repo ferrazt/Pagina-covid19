@@ -12,15 +12,21 @@ namespace COVID.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ITB_COVID_01 _TB01;
-        private readonly ILogger<HomeController> _logger;
+        
+        private readonly IVW02_COVID_ONLINE _VW02;
+        private readonly IVW01_COVID_UF _VW01_UF;
 
         public HomeController(
-            ITB_COVID_01 TB01
-            
+           
+            IVW02_COVID_ONLINE VW02,
+            IVW01_COVID_UF VW01_UF
+
+
             )
         {
-            _TB01 = TB01;
+            
+            _VW02 = VW02;
+            _VW01_UF = VW01_UF;
             
         }
 
@@ -34,7 +40,9 @@ namespace COVID.Controllers
 
             var model = new HomeViewModel 
             { 
-                TB01 = _TB01.Listar() 
+                
+                VW02_COVID_ONLINE = _VW02.Listar(),
+                VW01_COVID_UF = _VW01_UF.Listar()
             };
 
             return View(model);
@@ -56,9 +64,13 @@ namespace COVID.Controllers
         {
             public HomeViewModel()
             {
-                TB01 = new List<TB_COVID_01>();
+                
+                VW02_COVID_ONLINE = new List<VW02_COVID_ONLINE>();
+                VW01_COVID_UF = new List<VW01_COVID_UF>();
             }
-            public IEnumerable<TB_COVID_01> TB01 { get; set; }
+            
+            public IEnumerable<VW02_COVID_ONLINE> VW02_COVID_ONLINE { get; set; }
+            public IEnumerable<VW01_COVID_UF> VW01_COVID_UF { get; set; }
         }
     }
 }

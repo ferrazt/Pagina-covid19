@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace COVID.Interface
 {
-    public interface ITB_COVID_01 
+    public interface IVW02_COVID_ONLINE
     {
-        IEnumerable<TB_COVID_01> Listar(); 
+        IEnumerable<VW02_COVID_ONLINE> Listar();
     }
 }

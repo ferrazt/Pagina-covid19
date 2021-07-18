@@ -14,7 +14,10 @@ namespace COVID.Configuration
         public static IServiceCollection ResolveDependecies(this IServiceCollection services)
         {
             services.AddScoped<COVIDContext>();
-            services.AddScoped<ITB_COVID_01, TB_COVID_01Repository>();
+            
+            services.AddScoped<IVW02_COVID_ONLINE, VW02_COVID_ONLINERepository>();
+            services.AddScoped<IVW01_COVID_UF, VW01_COVID_UFRepository>();
+
             return services;
         }
     }

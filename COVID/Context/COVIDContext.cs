@@ -16,10 +16,14 @@ namespace COVID.Context
         public COVIDContext() : base() { }
      
         
-        public DbSet<TB_COVID_01> TB_COVID_01 { get; set; }
+        
+        public DbSet<VW02_COVID_ONLINE> VW02_COVID_ONLINE { get; set; }
+        public DbSet<VW01_COVID_UF> VW01_COVID_UF { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new TB_COVID_01Map());
+            modelBuilder.ApplyConfiguration(new VW01_COVID_UFMap());
+            modelBuilder.ApplyConfiguration(new VW02_COVID_ONLINEMap());
+            
 
             base.OnModelCreating(modelBuilder);
         }
