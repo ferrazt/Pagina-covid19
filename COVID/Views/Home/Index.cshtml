@@ -5,6 +5,8 @@
 
 
 }
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
 <style>
     .percent-box {
         top: 10px;
@@ -48,7 +50,7 @@
 <div class="col-md-12">
     <div class="row">
         <div class="col-lg-3">
-            <button class="btn-dark percent-box">
+            <button class="btn-dark percent-box" onclick="myFunction()">
                 <div class="small-box percent-box">
                     <div class="inner p" style="text-align: center; padding: 20px">
                         <p>TOTAL DE MORTES POR DIA NO BRASIL</p>
@@ -95,6 +97,18 @@
                 </div>
             </button>
         </div>
+        @*<div class="col-lg-3">
+            <button class="btn-dark percent-box">
+                <div class="small-box percent-box">
+                    <div class="inner" style="text-align: center; padding: 20px">
+                        <p>TOTAL MORTES HOJE</p>
+                        <h1>@(Model.VW01_COVID_UF.GroupBy(x => x.DATA).Select(x => x.Sum(x =>Convert.ToInt64(x.ULTIMO_CASO_MORTE)).ToString("N0"))) <span style="font-size: 27px;"></span></h1>
+                        <small></small>
+                    </div>
+                    <div class="percent-box"></div>
+                </div>
+            </button>
+        </div>*@
     </div>
     <div class="row">
         <div class="col-md-12 shadow-graph" style="margin-top:20px">
@@ -117,6 +131,7 @@
 
 @section scripts{
     <script src="~/lib/highcharts/highcharts.min.js"></script>
+<script src="~/jquery/jquery.min.js"></script>
     <script type="text/javascript">
 
     var charOnlineSite = Highcharts.chart('visao-online', {
@@ -191,13 +206,13 @@
                 }
                   ]
     });
-        var charOnlineSite = Highcharts.chart('visao-online-uf', {
+    var charOnlineSite = Highcharts.chart('visao-online-uf', {
                 chart: {
                 zoomType: 'xy',
                 type: 'column'
                 },
                 title: {
-                    text: 'Visão Online Novos Casos HOJE'
+                    text: 'Confirmações'
                 },
                 xAxis: {
                     categories:  [@Html.Raw("'" + String.Join("','", Model.VW01_COVID_UF.Select(x=>x.ESTADO).Distinct()) + "'")]
@@ -226,7 +241,39 @@
                       data: [@Html.Raw(String.Join(",", Model.VW01_COVID_UF.GroupBy(x => x.ESTADO).Select(x => x.Sum(x =>Convert.ToInt32(x.ULTIMA_CASO_CONFIRMADO)))))]
                 }
                   ]
-                   });
+    });
+        function myFunction() {
+            //$.ajaxSetup({
+            //    headers: { "Authorization": '2686e539db7b5055468476017100a08241c289e2' }
+            //});
+            var ApiLink = "https://api.brasil.io/v1/dataset/covid19";
+            var token = "token";
+            $.ajax({
+                url: ApiLink,
+                type: 'GET',
+                async: true,
+                /*headers: { Authorization: '2686e539db7b5055468476017100a08241c289e2' },*/
+              
+                headers: {
+                    Authorization : 'Bearer <token>'
+                },
+                
+
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);
+                    alert('Falha na consulta de valores específicos, erro:' + textStatus);
+                },
+                success: function (msg) {
+                    alert(msg);
+                    //var xyx = msg;
+                }
+            });
+        }
+   
+
+       
+        
+
 
 
     </script>
